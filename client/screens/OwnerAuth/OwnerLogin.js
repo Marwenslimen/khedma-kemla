@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native";
 import { Button, Icon } from "native-base";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { authentification } from "../../FbConfig/config.js";
+
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -17,9 +17,7 @@ const OwnerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [ownerData, setOwnerData] = useState([]);
-
   const navigation = useNavigation();
-
   _storeData = async (id) => {
     try {
       await AsyncStorage.setItem("Token", id);
@@ -27,19 +25,29 @@ const OwnerLogin = () => {
       console.log(error);
     }
   };
-
-  const signInOwner = () => {
-    signInWithEmailAndPassword(authentification, email, password)
-      .then((res) => {
+  //getting owner data by email to verify that the account is authorized to access or not
+  const signInOwner = async () => {
+    try {
+      // get data from axios
+      const axiosResponse = await axios.get(
+        `${baseUrl}owner/signInOwner/Authorization/${email}`
+      );
+      const data = axiosResponse.data;
+      console.log(data[0].AccountConfirmation);
+      setOwnerData(data);
+      if (data[0].AccountConfirmation) {
+        const res = await signInWithEmailAndPassword(auth, email, password);
         _storeData(res._tokenResponse.localId);
-      })
-      .then(() => {
-        navigation.navigate("Home");
-      })
-      .catch((err) => {
-        console.log(err);
-        alert(err);
-      });
+        navigation.navigate("HomeOwner");
+      } else {
+        alert(
+          "Your account is not authorized to login please wait for confirmation"
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
   };
 
   return (

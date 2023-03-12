@@ -3,19 +3,17 @@ import axios from "axios";
 import { Text, View, Button, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { StyleSheet } from "react-native";
-
+import { baseUrl } from "../urlConfig/urlConfig";
 const Reservation = () => {
   const [reservations, setReservations] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
   const [filterReserved, setFilterReserved] = useState(false);
-
   useEffect(() => {
-    handleFetchingAllTheReservationForAnOwner(), handleUpdateReservation();
+    handleFetchingAllTheReservationForAnOwner();
   }, []);
-
   const handleFetchingAllTheReservationForAnOwner = () => {
     axios
-      .get("http://192.168.43.108:3000/api/reservation/player/1")
+      .get(`${baseUrl}api/reservation/player/1`)
       .then(function (response) {
         setReservations(response.data);
       })
@@ -23,10 +21,22 @@ const Reservation = () => {
         console.log(error);
       });
   };
-
+  const addPoints = (playerFireId) => {
+    console.log(playerFireId);
+    axios
+      .get(`${baseUrl}api/player/${playerFireId}`)
+      .then((response) => {
+        let addedPoints = response.data[0].Points + 5;
+        axios.put(`${baseUrl}api/player/updatePlayerPoints`, {
+          FireId: playerFireId,
+          Points: addedPoints,
+        });
+      })
+      .catch((error) => console.log(error));
+  };
   const handleUpdateReservation = (reservationId) => {
     axios
-      .put(`http://192.168.43.108:3000/api/reservation/player/${reservationId}`)
+      .put(`${baseUrl}api/reservation/player/${reservationId}`)
       .then(function (response) {
         console.log(response.data);
         // Update the reservations state with the new data
@@ -42,12 +52,9 @@ const Reservation = () => {
         console.log(error);
       });
   };
-
   const handleDeleteReservation = (reservationId) => {
     axios
-      .delete(
-        `http://192.168.43.108:3000/api/reservation/player/${reservationId}`
-      )
+      .delete(`${baseUrl}api/reservation/player/${reservationId}`)
       .then(function (response) {
         console.log(response.data);
         // Update the reservations state by filtering out the deleted reservation
@@ -60,19 +67,15 @@ const Reservation = () => {
         console.log(error);
       });
   };
-
   const handleFilterReserved = () => {
     setFilterReserved(true);
   };
-
   const handleClearFilter = () => {
     setFilterReserved(false);
   };
-
   const filteredReservations = filterReserved
     ? reservations.filter((reservation) => reservation.Reserved)
     : reservations;
-
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -90,10 +93,12 @@ const Reservation = () => {
             <Text style={styles.reservationText}>
               Reserved: {reservation.Reserved.toString()}
             </Text>
-
             <Button
               title="Confirm"
-              onPress={() => handleUpdateReservation(reservation.id)}
+              onPress={() => {
+                handleUpdateReservation(reservation.id);
+                addPoints(reservation.playerFireId);
+              }}
               disabled={reservation.Reserved}
               style={styles.confirmButton}
               titleStyle={styles.confirmButtonText}

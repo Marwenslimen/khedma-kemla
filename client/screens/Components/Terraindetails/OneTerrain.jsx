@@ -43,13 +43,10 @@ const OneTerrain = ({ navigation, route }) => {
   };
   useEffect(() => {
     axios
-      .get(`http://192.168.101.8:3000/api/reviews/getreview/${route.params.id}`)
+      .get(`http://192.168.101.8:3000/api/reviews/getreview/1`)
       .then((response) => {
-        console.log(route.params);
         axios
-          .get(
-            `http://192.168.101.8:3000/api/terrain/terrains/atefIYED/${route.params.id}`
-          )
+          .get(`http://192.168.101.8:3000/api/terrain/terrains/oneterrains/1`)
           .then((response2) => {
             setdata(response.data);
             setdataterrain(response2.data);
@@ -234,8 +231,8 @@ const OneTerrain = ({ navigation, route }) => {
 
       <Button
         onPress={() => {
-          // setreview(addReview());
-          // addReview;
+          setreview(addReview());
+          addReview;
         }}
       >
         save
@@ -259,12 +256,12 @@ const OneTerrain = ({ navigation, route }) => {
           />
           <Card.Title
             style={{ marginTop: -40, marginLeft: 40 }}
-            title={item.plyerId}
+            title={item.FirstName}
           />
 
           <Card.Content>
             <Text
-              style={{ marginLeft: 20, fontSize: 20 }}
+              style={{ marginLeft: 20, fontSize: 20, color: "white" }}
               variant="headlineSmall"
             >
               {item.Comments}

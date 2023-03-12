@@ -8,10 +8,10 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import { authentification } from "../../FbConfig/config.js";
+
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
-import { storage } from "../../FbConfig/config.js";
+
 import { useNavigation } from "@react-navigation/native";
 import {
   Button,
@@ -107,7 +107,7 @@ const OwnerCreateAccount = () => {
           <Text
             style={{ color: "darkorange", top: -40, fontSize: 15, left: 20 }}
           >
-            Register Here and join the fun{" "}
+            Register Here and join the fun
           </Text>
           <TextInput
             size="sm"
