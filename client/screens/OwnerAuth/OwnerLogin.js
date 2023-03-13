@@ -12,7 +12,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import axios from "axios";
+import { baseUrl } from "../../urlConfig/urlConfig";
+import { auth } from "../../config.js";
 const OwnerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,25 +22,37 @@ const OwnerLogin = () => {
   const navigation = useNavigation();
   _storeData = async (id) => {
     try {
-      await AsyncStorage.setItem("Token", id);
+      await AsyncStorage.setItem("OwnerToken", id);
     } catch (error) {
       console.log(error);
     }
   };
   //getting owner data by email to verify that the account is authorized to access or not
   const signInOwner = async () => {
+    // console.log(`${baseUrl}owner/signInOwner/Authorization/${email}`, "url");
+    // axios
+    //   .get(`${baseUrl}owner/signInOwner/Authorization/${email}`)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => console.log(err));
+
     try {
       // get data from axios
       const axiosResponse = await axios.get(
         `${baseUrl}owner/signInOwner/Authorization/${email}`
       );
+      console.log(axiosResponse.data.AccountConfirmation);
+
       const data = axiosResponse.data;
-      console.log(data[0].AccountConfirmation);
+      console.log(data);
       setOwnerData(data);
-      if (data[0].AccountConfirmation) {
+      console.log(axiosResponse.data.Fireid);
+      _storeData(axiosResponse.data.Fireid);
+      console.log(data.AccountConfirmation, "goodbye madi taw netsarref");
+      if (data.AccountConfirmation) {
         const res = await signInWithEmailAndPassword(auth, email, password);
-        _storeData(res._tokenResponse.localId);
-        navigation.navigate("HomeOwner");
+        navigation.navigate("homeowner");
       } else {
         alert(
           "Your account is not authorized to login please wait for confirmation"
@@ -51,7 +65,7 @@ const OwnerLogin = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <KeyboardAvoidingView style={styles.container} behavior="height">
       <View style={styles.inputContainer}>
         <Text style={{ color: "darkorange", fontSize: 15, top: -90, left: 65 }}>
           Please Login as An Owner
@@ -69,6 +83,7 @@ const OwnerLogin = () => {
         />
         <TextInput
           placeholder="Password"
+          
           value={password}
           onChangeText={(text) => setPassword(text)}
           style={styles.input}

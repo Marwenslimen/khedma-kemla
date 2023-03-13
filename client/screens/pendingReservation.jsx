@@ -3,7 +3,7 @@ import axios from "axios";
 import { Text, View, Button, ScrollView } from "react-native";
 import { StyleSheet } from "react-native";
 
-const pendingReservation = () => {
+const PendingReservation = () => {
   const [reservations, setReservations] = useState([]);
   const [terrains, setTerrains] = useState([]);
 
@@ -20,7 +20,7 @@ const pendingReservation = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.43.108:3000/api/reservation/playerss/1/pending")
+      .get("http://192.168.101.8:3000/api/reservation/playerss/1/pending")
       .then((response) => {
         setReservations(response.data);
       })
@@ -50,4 +50,4 @@ const pendingReservation = () => {
   );
 };
 
-export default pendingReservation;
+export default PendingReservation;

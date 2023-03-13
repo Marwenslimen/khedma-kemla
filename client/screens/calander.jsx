@@ -6,6 +6,8 @@ import {
   Modal,
   StyleSheet,
   Alert,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import axios from "axios";
@@ -23,7 +25,7 @@ const AppointmentScheduler = () => {
   const handleDayPress = (day) => {
     setSelectedDay(day.dateString);
     setSelectedTime(null);
-    setModalVisible(true);
+
     console.log(day);
     const reservationsForSelectedDay = allReservations.filter((reservation) => {
       const reservationDate = new Date(reservation.Day);
@@ -52,7 +54,7 @@ const AppointmentScheduler = () => {
 
   const handleTimePress = (time) => {
     setSelectedTime(time);
-    setConfirmVisible(true);
+    setModalVisible(true);
   };
 
   useEffect(() => {
@@ -99,29 +101,39 @@ const AppointmentScheduler = () => {
   ];
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={{ flex: 1 }}>
       <Calendar
         onDayPress={handleDayPress}
         markedDates={{
           [selectedDay]: { selected: true },
         }}
       />
-      <Modal
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Select a time:</Text>
-          <Root>
+      {selectedDay && (
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: 20, marginVertical: 20, color: "white" }}>
+            Select a time:
+          </Text>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={true}
+            contentContainerStyle={{ paddingHorizontal: 20 }}
+          >
             {timeSlots.map((hour) => (
               <TouchableOpacity
                 key={hour}
                 style={[
-                  styles.timeSlot,
-                  hour === selectedTime && styles.selectedTimeSlot,
+                  {
+                    width: 80,
+                    height: 40,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginHorizontal: 10,
+                  },
+                  hour === selectedTime && {
+                    borderBottomWidth: 1,
+                    borderColor: "darkorange",
+                  },
                 ]}
                 onPress={() => {
                   handleTimePress(hour),
@@ -140,45 +152,29 @@ const AppointmentScheduler = () => {
                 }}
               >
                 <Text
-                  style={{
-                    color: resversedDate.includes(hour) ? "red" : "black",
-                  }}
+                  style={[
+                    {
+                      color: resversedDate.includes(hour)
+                        ? "lightgrey"
+                        : "darkorange",
+                      opacity: resversedDate.includes(hour) ? 0.5 : 1,
+                      fontSize: 18,
+                      fontWeight: "600",
+                      fontStyle: "italic",
+                    },
+                    hour === selectedTime && {
+                      color: "darkorange",
+                    },
+                  ]}
                 >
-                  {hour}
+                  {resversedDate.includes(hour) ? "reserved" : hour}
                 </Text>
               </TouchableOpacity>
             ))}
-          </Root>
+          </ScrollView>
         </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        visible={confirmVisible}
-        onRequestClose={() => {
-          setConfirmVisible(false);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>
-            Are you sure you want to select {selectedTime}:00 on {selectedDay}?
-          </Text>
-          {/* <View style={styles.modalButtonContainer}>
-             <TouchableOpacity
-              style={[styles.modalButton, styles.cancelButton]}
-              onPress={() => setConfirmVisible(false)}
-            >
-              <Text style={styles.modalButtonText}>Cancel</Text>
-            </TouchableOpacity> */}
-          {/* <TouchableOpacity
-              style={[styles.modalButton, styles.confirmButton]}
-              onPress={handleConfirm}
-            >
-              <Text style={styles.modalButtonText}>Confirm</Text>
-            </TouchableOpacity> 
-          </View>*/}
-        </View>
-      </Modal>
-    </View>
+      )}
+    </ScrollView>
   );
 };
 
@@ -201,17 +197,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
-  timeSlot: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginVertical: 5,
-    width: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
   selectedTimeSlot: {
-    backgroundColor: "green",
+    backgroundColor: "transparent",
   },
 });
 export default AppointmentScheduler;

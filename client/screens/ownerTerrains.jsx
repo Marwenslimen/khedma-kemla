@@ -9,9 +9,11 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
+import { Card } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { baseUrl } from "../urlConfig/urlConfig";
+import { ScrollView } from "react-navigation";
 const HandleOwnerTerrains = () => {
   const [terrains, setTerrains] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -60,45 +62,104 @@ const HandleOwnerTerrains = () => {
       );
       console.log(response.data);
       setModalVisible(false);
-      getTerrains();
+      setSelectedTerrain();
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
     _retrieveData().then((response) => {
-      setTerrains(response[0]);
+      setTerrains(response);
     });
   }, []);
   return (
-    <View>
+    <View style={{ backgroundColor: "#F49D1A", height: "100%" }}>
       {terrains ? (
         terrains.map((terrain) => (
-          <View key={terrain.id}>
-            <Text>{terrain.Name}</Text>
-            <Text>{terrain.Price}</Text>
-            <Text>{terrain.Description}</Text>
-            <Text>{terrain.Location}</Text>
-            <Text>{terrain.Region}</Text>
-            <Text>{terrain.Category}</Text>
-            <Image
-              source={{
-                uri: "https://i.guim.co.uk/img/media/888a4d1a86c821338ae04c8af431b2d3dcb80fe6/0_346_5184_3110/master/5184.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=a0b14c1253162370f7c2a76e5c962551",
+          // <View key={terrain.id}>
+          //   <Text>{terrain.Name}</Text>
+          //   <Text>{terrain.Price}</Text>
+          //   <Text>{terrain.Description}</Text>
+          //   <Text>{terrain.Location}</Text>
+          //   <Text>{terrain.Region}</Text>
+          //   <Text>{terrain.Category}</Text>
+          //   <Image
+          //     source={{
+          //       uri: "https://i.guim.co.uk/img/media/888a4d1a86c821338ae04c8af431b2d3dcb80fe6/0_346_5184_3110/master/5184.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=a0b14c1253162370f7c2a76e5c962551",
+          //     }}
+          //   />
+          //   <Text>{terrain.Capacity}</Text>
+          //   <Text>{terrain.Availability ? "Available" : "Unavailable"}</Text>
+          //   <Button
+          //     title="Delete"
+          //     onPress={() => handleDeleteTerrain(terrain.id)}
+          //   />
+          //   <Button
+          //     title="Update"
+          //     onPress={() => {
+          //       setModalVisible(true);
+          //     }}
+          //   />
+          // </View>
+          <Card
+            style={{
+              paddingBottom: 10,
+              paddingHorizontal: 10,
+              shadowColor: "transparent",
+              backgroundColor: "transparent",
+              marginTop: 30,
+            }}
+            onPress={(e) => {
+              navigation.navigate("reservations", { id: terrain.id });
+            }}
+          >
+            <View style={{ opacity: 0.9 }}>
+              <Card.Cover
+                source={{
+                  uri: terrain.Img1,
+                }}
+              />
+            </View>
+            <Text
+              style={{
+                position: "absolute",
+                top: 140,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                justifyContent: "center",
+                alignItems: "center",
+                borderWidth: 0.5,
+                color: "white",
+                fontWeight: "bold",
+                fontSize: 20,
+                paddingLeft: 20,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+                backgroundColor: "#181818",
+                opacity: 0.9,
+                textTransform: "capitalize",
               }}
-            />
-            <Text>{terrain.Capacity}</Text>
-            <Text>{terrain.Availability ? "Available" : "Unavailable"}</Text>
-            <Button
-              title="Delete"
-              onPress={() => handleDeleteTerrain(terrain.id)}
-            />
-            <Button
-              title="Update"
-              onPress={() => {
-                setModalVisible(true);
+            >
+              {terrain.Name}
+            </Text>
+
+            <Text
+              style={{
+                position: "absolute",
+                top: 170,
+                left: 50,
+                right: 0,
+                bottom: 0,
+                justifyContent: "center",
+                alignItems: "center",
+                color: "white",
+                fontWeight: "600",
               }}
-            />
-          </View>
+            >
+              {terrain.Capacity} Player
+            </Text>
+          </Card>
         ))
       ) : (
         <Text>Loading..</Text>

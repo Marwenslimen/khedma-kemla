@@ -2,13 +2,21 @@ const db = require("../index.js");
 const Owner = db.Owner;
 module.exports = {
   CreateOwner: async (req, res) => {
-    const { Fireid, Email, FullName, PhoneNumber, patentImage, ProfileImage } =
-      req.body;
+    const {
+      Fireid,
+      Email,
+      FirstName,
+      LastName,
+      PhoneNumber,
+      patentImage,
+      ProfileImage,
+    } = req.body;
     try {
       const owner = await Owner.create({
         Fireid,
         Email,
-        FullName,
+        FirstName,
+        LastName,
         PhoneNumber,
         patentImage,
         ProfileImage,
@@ -36,7 +44,7 @@ module.exports = {
   getOwnerByEmailForAuthorization: async (req, res) => {
     const { Email } = req.params;
     try {
-      const owner = await Owner.findAll({
+      const owner = await Owner.findOne({
         where: {
           Email: Email,
         },

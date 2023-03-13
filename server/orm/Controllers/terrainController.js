@@ -30,9 +30,9 @@ const getAllCat = async (req, res) => {
 
 const getOne = async (req, res) => {
   try {
-    const { terrainId } = req.params;
+    const { id } = req.params;
 
-    const terrain = await Terrain.findOne({ where: { id: terrainId } });
+    const terrain = await Terrain.findOne({ where: { id } });
 
     res.status(201).json(terrain);
   } catch (error) {

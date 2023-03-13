@@ -4,16 +4,51 @@ import { Text, View, Button, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { StyleSheet } from "react-native";
 import { baseUrl } from "../urlConfig/urlConfig";
-const Reservation = () => {
+import { Card } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TouchableOpacity } from "react-native";
+const Reservation = ({ naviagtion, route }) => {
   const [reservations, setReservations] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
   const [filterReserved, setFilterReserved] = useState(false);
+  const [token, setToken] = useState("");
+  const [terrain, setTerrain] = useState([]);
+  const [style, setstyle] = useState(false);
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("OwnerToken");
+      console.log("welcome :", value);
+      setToken(value);
+      return value;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
+    _retrieveData().then((response) => getAllTerrains(response));
+
     handleFetchingAllTheReservationForAnOwner();
   }, []);
+
+  const getAllTerrains = (token) => {
+    axios
+      .get(`${baseUrl}api/terrain/${token}`)
+      .then(function (response) {
+        setTerrain(response.data);
+
+        return response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   const handleFetchingAllTheReservationForAnOwner = () => {
     axios
-      .get(`${baseUrl}api/reservation/player/1`)
+      .get(`${baseUrl}api/reservation/player/${route.params.id}`)
       .then(function (response) {
         setReservations(response.data);
       })
@@ -77,38 +112,108 @@ const Reservation = () => {
     ? reservations.filter((reservation) => reservation.Reserved)
     : reservations;
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "#F49D1A" }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Icon name="bell" size={30} style={styles.icon} />
           <Text style={styles.notificationCount}>{notificationCount}</Text>
         </View>
-        <Button onPress={handleFilterReserved} title="filter"></Button>
-        <Button title="clear" onPress={handleClearFilter}></Button>
+        <TouchableOpacity
+          style={{ backgroundColor: "transparent", left: 250 }}
+          onPress={handleFilterReserved}
+        >
+          <Text style={{ fontSize: 30 }}>Filter</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ top: -40, left: 70 }}
+          onPress={handleClearFilter}
+        >
+          <Text style={{ fontSize: 30 }}>All</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>Reservations:</Text>
         {filteredReservations.map((reservation) => (
-          <View key={reservation.id} style={styles.reservationContainer}>
-            <Text style={styles.reservationText}>Day: {reservation.Day}</Text>
-            <Text style={styles.reservationText}>Hour: {reservation.Hour}</Text>
-            <Text style={styles.reservationText}>
-              Reserved: {reservation.Reserved.toString()}
-            </Text>
-            <Button
-              title="Confirm"
-              onPress={() => {
-                handleUpdateReservation(reservation.id);
-                addPoints(reservation.playerFireId);
+          <View>
+            <Card
+              style={{
+                paddingBottom: 10,
+                paddingHorizontal: 10,
+                shadowColor: "transparent",
+                backgroundColor: "transparent",
+                marginVertical: 10,
+                borderColor: "black",
+                borderWidth: 1,
+                marginVertical: 50,
               }}
-              disabled={reservation.Reserved}
-              style={styles.confirmButton}
-              titleStyle={styles.confirmButtonText}
-            />
-            <Button
-              title="Delete"
-              onPress={() => handleDeleteReservation(reservation.id)}
-              style={styles.deleteButton}
-              titleStyle={styles.deleteButtonText}
-            />
+            >
+              <Text
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+
+                  color: "black",
+                  fontWeight: "500",
+                  fontSize: 20,
+                }}
+              >
+                Day : {reservation.Day}
+              </Text>
+
+              <Text
+                style={{
+                  top: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "black",
+                  fontWeight: "600",
+                }}
+              >
+                Time : {reservation.Hour}
+              </Text>
+              <Text
+              // style={{
+              //   position: "absolute",
+              //   top: 170,
+              //   left: 270,
+              //   right: 0,
+              //   bottom: 0,
+              //   justifyContent: "center",
+              //   alignItems: "center",
+              //   color: "white",
+              //   paddingLeft: 70,
+              // }}
+              ></Text>
+
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  left: 110,
+                  top: 50,
+
+                  borderLeftColor: "black",
+                  borderLeftWidth: 1,
+                }}
+                onPress={() => {
+                  handleUpdateReservation(reservation.id);
+                  addPoints(reservation.playerFireId);
+                  setstyle(true);
+                }}
+                disabled={reservation.Reserved}
+              >
+                <Text style={{ fontSize: 13 }}>Confirm</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  top: 50,
+                  left: 250,
+                  borderLeftColor: "black",
+                  borderLeftWidth: 1,
+                }}
+                onPress={() => handleDeleteReservation(reservation.id)}
+              >
+                <Text style={{ fontSize: 13 }}>Reject Reservation</Text>
+              </TouchableOpacity>
+            </Card>
           </View>
         ))}
       </View>
@@ -118,18 +223,24 @@ const Reservation = () => {
 
 const styles = StyleSheet.create({
   container: {
+    top: 50,
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F49D1A",
     paddingHorizontal: 10,
     paddingVertical: 20,
+    height: 1000,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 10,
+    left: 170,
+    position: "absolute",
   },
   icon: {
     marginRight: 10,
+    top: 20,
   },
   notificationCount: {
     fontWeight: "bold",

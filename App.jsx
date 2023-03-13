@@ -27,13 +27,15 @@ import OwnerCreateAccount from "./client/screens/OwnerAuth/OwnerCreateAccount";
 
 import AddEventForm from "./client/screens/addEvents.jsx";
 import LandingScreen from "./client/screens/Components/landing/landingpage.jsx";
+import Homeowner from "./client/screens/Components/Homeowner/Homeowner.jsx";
+import Terrainreservations from "./client/screens/terrainreservations.jsx";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Landingscreen"
           component={LandingScreen}
           options={{
@@ -59,6 +61,22 @@ const App = () => {
               color: "orange",
             },
             title: "",
+          }}
+        ></Stack.Screen>
+        <Stack.Screen
+          name="homeowner"
+          component={Homeowner}
+          options={{
+            statusBarColor: "#F49D1A",
+            headerStyle: {
+              backgroundColor: "#F49D1A",
+            },
+            headerTitleStyle: {
+              color: "black",
+            },
+            title: "Your Terrains",
+
+            navigationBarColor: "black",
           }}
         ></Stack.Screen>
         <Stack.Screen
@@ -104,8 +122,7 @@ const App = () => {
             },
             title: "Register Here",
           }}
-        ></Stack.Screen> */}
-
+        ></Stack.Screen>
         <Stack.Screen
           name="Home"
           component={Home}
@@ -246,16 +263,41 @@ const App = () => {
             title: "Get your directions !",
           }}
         ></Stack.Screen>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="HandleOwnerTerrains"
           component={HandleOwnerTerrains}
-          options={{ title: "HandleOwnerTerrains", headerShown: false }}
+          options={{
+            title: "Your Terrains",
+            statusBarColor: "#F49D1A",
+            headerStyle: {
+              backgroundColor: "#F49D1A",
+            },
+            headerTitleStyle: {
+              color: "black",
+            },
+            headerTintColor: "black",
+          }}
         ></Stack.Screen>
         <Stack.Screen
           name="AddEventForm"
           component={AddEventForm}
           options={{ title: "AddEventForm" }}
-        ></Stack.Screen> */}
+        ></Stack.Screen>
+        <Stack.Screen
+          name="reservations"
+          component={Reservation}
+          options={{
+            title: "This Terrain Reservations",
+            statusBarColor: "#F49D1A",
+            headerStyle: {
+              backgroundColor: "#F49D1A",
+            },
+            headerTitleStyle: {
+              color: "black",
+            },
+            headerTintColor: "black",
+          }}
+        ></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
