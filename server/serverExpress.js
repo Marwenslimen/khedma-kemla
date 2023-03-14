@@ -2,7 +2,7 @@ const express = require("express");
 
 const cors = require("cors");
 const Owner = require("./orm/Routes/ownerRoutes.js");
-const CommentsRouter = require("./orm/Routes/CommentsRoute.js");
+const CommentsRouter = require("./orm/Routes/PostRoute.js");
 const reviewsRoute = require("./orm/Routes/reviewsRoute");
 const reservationRouter = require("./orm/Routes/reservationRoute");
 const terrainRouter = require("./orm/Routes/terrainRoute");
