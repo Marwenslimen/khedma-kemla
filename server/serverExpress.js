@@ -2,7 +2,7 @@ const express = require("express");
 
 const cors = require("cors");
 const Owner = require("./orm/Routes/ownerRoutes.js");
-
+const CommentsRouter = require("./orm/Routes/CommentsRoute.js");
 const reviewsRoute = require("./orm/Routes/reviewsRoute");
 const reservationRouter = require("./orm/Routes/reservationRoute");
 const terrainRouter = require("./orm/Routes/terrainRoute");
@@ -24,7 +24,7 @@ app.use("/api/terrain", terrainRouter);
 app.use("/api/reviews", reviewsRoute);
 app.use("/api/events", EventRouter);
 app.use("/api/player", PlayerRouter);
-
+app.use("/Comments",CommentsRouter);
 app.listen(PORT, () => {
   console.log("server working");
 });
