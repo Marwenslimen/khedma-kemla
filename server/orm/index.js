@@ -21,6 +21,7 @@ db.Reservation = require("../orm/models/reservationModel")(
 db.Event = require("../orm/models/eventsModel")(sequelize, DataTypes); // require the event model
 db.Reviews = require("../orm/models/reviewsModel")(sequelize, DataTypes); // require the Reviews model
 db.Comments = require("./models/PostModel")(sequelize,DataTypes); // require the comments model
+db.Admin = require("./models/AdminModel")(sequelize,DataTypes); // require the Admin model
 db.sequelize
   .sync({ force: false })
   .then(() => console.log("All models were synchronized successfully"))

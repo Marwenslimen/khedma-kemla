@@ -29,13 +29,18 @@ import AddEventForm from "./client/screens/addEvents.jsx";
 import LandingScreen from "./client/screens/Components/landing/landingpage.jsx";
 import Homeowner from "./client/screens/Components/Homeowner/Homeowner.jsx";
 import Terrainreservations from "./client/screens/terrainreservations.jsx";
+import Post from "./client/screens/Components/Terraindetails/Post.jsx"
+import OwnerProfile from "./client/screens/Components/Homeowner/OwnerProfile/OwnerProfile.jsx";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+    {/*  <Stack.Screen
+name="Post"
+component={Post}/>*/}
+ <Stack.Screen
           name="Landingscreen"
           component={LandingScreen}
           options={{
@@ -48,7 +53,10 @@ const App = () => {
             initialRouteName: "Landingscreen",
           }}
         ></Stack.Screen>
-
+<Stack.Screen
+name="OwnerProfile"
+component={OwnerProfile}>
+</Stack.Screen>
         <Stack.Screen
           name="ownerlogin"
           component={OwnerLogin}
@@ -297,7 +305,7 @@ const App = () => {
             },
             headerTintColor: "black",
           }}
-        ></Stack.Screen>
+        ></Stack.Screen>  
       </Stack.Navigator>
     </NavigationContainer>
   );

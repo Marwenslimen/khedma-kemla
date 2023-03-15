@@ -28,6 +28,7 @@ const AnimatedTouchable = Animated.createAnimatedComponent(
 import HorizontalPicker from "@vseslav/react-native-horizontal-picker";
 import { TouchableOpacity } from "react-native";
 import BottomNavigationBar from "../Bottomnav/BottomNav";
+import { baseUrl } from "../../../urlConfig/urlConfig";
 
 const Items = [
   "ariana",
@@ -74,7 +75,7 @@ const Allterrains = ({ navigation, route }) => {
   useEffect(() => {
     axios
       .get(
-        `http://192.168.101.8:3000/api/terrain/terrains/category/${route.params.Category}`
+        `${baseUrl}api/terrain/terrains/category/${route.params.Category}`
       )
       .then((response) => {
         if (response.data.length === 0) {

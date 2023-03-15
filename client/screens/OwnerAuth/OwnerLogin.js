@@ -29,14 +29,7 @@ const OwnerLogin = () => {
   };
   //getting owner data by email to verify that the account is authorized to access or not
   const signInOwner = async () => {
-    // console.log(`${baseUrl}owner/signInOwner/Authorization/${email}`, "url");
-    // axios
-    //   .get(`${baseUrl}owner/signInOwner/Authorization/${email}`)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => console.log(err));
-
+  
     try {
       // get data from axios
       const axiosResponse = await axios.get(
@@ -49,7 +42,6 @@ const OwnerLogin = () => {
       setOwnerData(data);
       console.log(axiosResponse.data.Fireid);
       _storeData(axiosResponse.data.Fireid);
-      console.log(data.AccountConfirmation, "goodbye madi taw netsarref");
       if (data.AccountConfirmation) {
         const res = await signInWithEmailAndPassword(auth, email, password);
         navigation.navigate("homeowner");

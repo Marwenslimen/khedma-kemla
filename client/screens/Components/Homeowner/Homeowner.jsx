@@ -1,12 +1,41 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import React, { useEffect,useState } from "react";
+import { StyleSheet, View, Text, Image,Pressable } from "react-native";
 import { Avatar } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+ import AsyncStorage from "@react-native-async-storage/async-storage";
+ import axios from 'axios'
+ import { baseUrl } from "../../../urlConfig/urlConfig";
 
 const Homeowner = ({ navigation }) => {
-  const [dataowner, setdataowner] = useState([]);
+
+
+
+  const [dataowner, setdataowner] = useState(null);
+ console.log(dataowner)
+useEffect(() => {
+ _retrieveData().then((res)=>getOwnerData(res))
+}, [])
+ const getOwnerData =(id)=>{
+
+   axios.get(`${baseUrl}owner/signInOwner/${id}`).then((res)=>{
+    setdataowner(res.data)
+   })
+
+ }
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("OwnerToken");
+      console.log("welcome :", value);
+      return value;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       <Text style={{ color: "white", fontSize: 20, top: 30, left: -60 }}>
@@ -68,12 +97,17 @@ const Homeowner = ({ navigation }) => {
 
       <View style={styles.row}>
         <View style={styles.card3}>
-          <Avatar.Image
+        { dataowner ? (
+          <><Avatar.Image
             source={{
-              uri: "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg?fit=640,427",
+              uri:dataowner[0].ProfileImage,
             }}
             size={45}
-          />
+          /></> ) : (<Avatar.Image />)}
+         <Pressable
+          onPress={()=>
+            navigation.navigate("OwnerProfile")
+           }>
           <Text
             style={{
               left: 60,
@@ -82,9 +116,11 @@ const Homeowner = ({ navigation }) => {
               fontWeight: "bold",
               color: "black",
             }}
+          
           >
             Profile
           </Text>
+          </Pressable>
         </View>
         <View style={styles.card3}>
           <Ionicons name="log-out-outline" color={"black"} size={40}></Ionicons>

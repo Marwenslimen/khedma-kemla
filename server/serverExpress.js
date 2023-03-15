@@ -8,6 +8,7 @@ const reservationRouter = require("./orm/Routes/reservationRoute");
 const terrainRouter = require("./orm/Routes/terrainRoute");
 const EventRouter = require("./orm/Routes/eventsRoute");
 const PlayerRouter = require("./orm/Routes/playerRoute");
+const AdminRouter = require("./orm/Routes/AdminRoute")
 const db = require("../server/orm/index");
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/reviews", reviewsRoute);
 app.use("/api/events", EventRouter);
 app.use("/api/player", PlayerRouter);
 app.use("/Comments",CommentsRouter);
+app.use("/Admin",AdminRouter);
 app.listen(PORT, () => {
   console.log("server working");
 });

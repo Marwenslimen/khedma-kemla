@@ -4,9 +4,9 @@ import { Input, Stack, Center, NativeBaseProvider } from "native-base";
 import axios from "axios" 
 import { Avatar, Button, Card } from "react-native-paper";
 import {baseUrl} from "../../../urlConfig/urlConfig.js"
-import PlayerDetails from "../Terraindetails/PlayerDetails";
+import PlayerDetails from "./PlayerDetails";
 import {AntDesign } from  "@expo/vector-icons"
-const Comment = () => {
+const Post = () => {
 const [comment , setComment]=useState("") 
 const [data,setData]=useState([])
 const [refresh,setRefresh] = useState(false)
@@ -17,7 +17,7 @@ useEffect(() => {
 
   const getComment = () =>{
  
-    axios.get(`${baseUrl}Comments/getComment/2`) // 2 is the terrain Id 
+    axios.get(`${baseUrl}Comments/getComment/1`) //  is the terrain Id 
     .then((response) =>setData(response.data))
     .catch((error) =>console.log(error))
     
@@ -86,6 +86,6 @@ axios.post(`${baseUrl}Comments/addComment/wYaNseqrwlcCrkQHZnjJrVQ4lQp2/2`, body)
   )
 }
 
-export default Comment
+export default Post
 
 const styles = StyleSheet.create({})
