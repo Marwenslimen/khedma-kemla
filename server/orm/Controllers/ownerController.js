@@ -54,4 +54,21 @@ module.exports = {
       console.log(err);
     }
   },
-};
+  UpdateOwnerProfile: async (req,res)=>{
+    const { Fireid,FirstName,LastName,Email,PhoneNumber,ProfileImage}=req.body;
+  
+  try { 
+    const owner= await Owner.update( {
+      FirstName,
+      LastName,
+      PhoneNumber,
+      Email,
+      ProfileImage
+    },{
+      where:{Fireid:Fireid}
+    } )
+res.status(200).send("Account Updated !")
+
+  } catch (err) {console.log(err)}
+}
+}

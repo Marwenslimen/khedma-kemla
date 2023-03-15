@@ -11,7 +11,7 @@ module.exports = {
     } = req.body;
     try {
       const Admin = await Admins.create({
-        FireId,
+        Fired,
         FirstName,
         LastName,
         Email,

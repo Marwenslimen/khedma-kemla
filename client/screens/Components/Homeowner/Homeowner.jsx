@@ -106,7 +106,7 @@ useEffect(() => {
           /></> ) : (<Avatar.Image />)}
          <Pressable
           onPress={()=>
-            navigation.navigate("OwnerProfile")
+            navigation.navigate("OwnerProfile",{dataowner})
            }>
           <Text
             style={{

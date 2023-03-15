@@ -8,4 +8,5 @@ router.get(
   "/signInOwner/Authorization/:Email",
   Owner.getOwnerByEmailForAuthorization
 );
+router.put("/UpdateOwner",Owner.UpdateOwnerProfile)
 module.exports = router;
