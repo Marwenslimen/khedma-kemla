@@ -31,9 +31,13 @@ import Homeowner from "./client/screens/Components/Homeowner/Homeowner.jsx";
 import Terrainreservations from "./client/screens/terrainreservations.jsx";
 import Post from "./client/screens/Components/Terraindetails/Post.jsx"
 import OwnerProfile from "./client/screens/Components/Homeowner/OwnerProfile/OwnerProfile.jsx";
-
+import ResetPassword from "./client/screens/OwnerAuth/ResetPassword.jsx"
 const Stack = createNativeStackNavigator();
+
+
 const App = () => {
+  
+  
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -71,6 +75,24 @@ component={OwnerProfile}>
             title: "",
           }}
         ></Stack.Screen>
+
+
+<Stack.Screen
+          name="ForgotPassword"
+          component={ResetPassword}
+          options={{
+            statusBarColor: "black",
+            headerStyle: {
+              backgroundColor: "black",
+            },
+            headerTitleStyle: {
+              color: "orange",
+            },
+            title: "",
+          }}
+        ></Stack.Screen>
+
+
         <Stack.Screen
           name="homeowner"
           component={Homeowner}

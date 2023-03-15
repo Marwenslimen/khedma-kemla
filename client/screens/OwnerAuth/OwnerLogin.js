@@ -93,6 +93,18 @@ const OwnerLogin = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
+              navigation.navigate("ForgotPassword");
+            }}
+            style={styles.buttonOutLine}
+          >
+            <Text style={styles.buttonOutLineText}>
+           Forgot Your Password ?
+            </Text>
+          </TouchableOpacity>
+
+
+          <TouchableOpacity
+            onPress={() => {
               navigation.navigate("createowneraccount");
             }}
             style={styles.buttonOutLine}

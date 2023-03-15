@@ -7,10 +7,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
  import AsyncStorage from "@react-native-async-storage/async-storage";
  import axios from 'axios'
  import { baseUrl } from "../../../urlConfig/urlConfig";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../config.js";
+
 
 const Homeowner = ({ navigation }) => {
 
-
+console.log(auth.currentUser);
 
   const [dataowner, setdataowner] = useState(null);
  console.log(dataowner)
@@ -25,6 +28,11 @@ useEffect(() => {
 
  }
 
+ const SignOut =()=> {
+signOut(auth).then(()=> {
+  navigation.navigate("ownerlogin")
+  alert("Good Bye See You Next Time 👋")})
+ }
   _retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem("OwnerToken");
@@ -124,6 +132,9 @@ useEffect(() => {
         </View>
         <View style={styles.card3}>
           <Ionicons name="log-out-outline" color={"black"} size={40}></Ionicons>
+        <Pressable 
+        onPress={()=>SignOut()}
+        > 
           <Text
             style={{
               left: 60,
@@ -135,6 +146,7 @@ useEffect(() => {
           >
             Logout
           </Text>
+          </Pressable>
         </View>
       </View>
     </View>
