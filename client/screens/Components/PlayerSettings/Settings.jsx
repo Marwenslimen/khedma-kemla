@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from "expo-image-picker";
-import { auth, app } from "../../../../config";
+import { auth, app } from "../../../config";
 import axios from 'axios'
-import { baseUrl } from '../../../../urlConfig/urlConfig';
+import { baseUrl } from '../../../urlConfig/urlConfig';
 import {
   getStorage,
   ref,
@@ -11,16 +11,28 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import {updateEmail,updatePassword } from 'firebase/auth'
-const EditProfileView = ({route}) => {
+const PlayerSettings = () => {
 
-  const [data,setData]=useState(route.params.dataowner[0])
-  const [FirstName, setFirstName] = useState(data.FirstName);
-  const [LastName, setLastName] = useState(data.LastName);
-  const [Email, setEmail] = useState(data.Email);
-  const [PhoneNumber, setPhoneNumber] = useState(data.PhoneNumber);
-  const [ProfileImage, setProfileImage] = useState(data.ProfileImage);
+  const [data,setData]=useState(null)
+  const [FirstName, setFirstName] = useState("Marwen");
+  const [SecondName, setSecondName] = useState("Slimen");
+  const [Email, setEmail] = useState();
+  const [ProfileImage, setProfileImage] = useState();
   const [Password,setPassword]=useState(null)
-  const [ConfirmPassword,setConfirmPassword]=useState("")
+  const [ConfirmPassword,setConfirmPassword]=useState(null)
+useEffect(() => {
+  
+axiosGetPlayer()
+ 
+}, [])
+// function hedhi bech tetna7A kif norbot l khedma 
+const axiosGetPlayer =()=>{
+    axios.get(`${baseUrl}api/player/g4BNGHXshTTJCgQr8GT7LM6EJOf2`).then((res)=>{
+      console.log(res.data[0]);
+      setData(res.data[0])
+    })
+}
+
 
   const updateEmailFirebase=()=>{
     updateEmail(auth.currentUser,Email)
@@ -73,22 +85,22 @@ const EditProfileView = ({route}) => {
   };
 
   const handleSubmit = () => {
-
     if (Password && Password === ConfirmPassword) {
+
+
     updateEmailFirebase()
     const body={
-      Fireid:data.Fireid,
+      FireId:"g4BNGHXshTTJCgQr8GT7LM6EJOf2",
       FirstName,
-      LastName,
+      SecondName,
       Email,
-      PhoneNumber,
       ProfileImage
     }
-axios.put(`${baseUrl}owner/updateOwner`,body)
-.then(res=>alert("Updated"))
+axios.put(`${baseUrl}api/player/updatePlayer`,body)
+.then(res=>alert("Updated")).catch(err=>console.log(err))
 
   updatePasswordFirebase()
-}else {
+}else{
   alert("Wrong Confirm Password")
 }
 
@@ -117,8 +129,8 @@ axios.put(`${baseUrl}owner/updateOwner`,body)
         <TextInput
           style={styles.input}
           placeholder="Enter Your Last Name"
-          value={LastName}
-          onChangeText={setLastName}
+          value={SecondName}
+          onChangeText={setSecondName}
         />
         <Text style={styles.label}>Email</Text>
         <TextInput
@@ -127,15 +139,7 @@ axios.put(`${baseUrl}owner/updateOwner`,body)
           value={Email}
           onChangeText={setEmail}
         />
-        <Text style={styles.label}>Phone Number </Text>
-        <TextInput
-         keyboardType='numeric'
- 
-          style={styles.input}
-          placeholder="Enter Your Phone Number"
-          value={PhoneNumber.toString()}
-          onChangeText={setPhoneNumber}
-        />
+       
         <Text style={styles.label}>Password</Text>
         <TextInput
           secureTextEntry={true} 
@@ -145,7 +149,7 @@ axios.put(`${baseUrl}owner/updateOwner`,body)
           
           onChangeText={setPassword}
         />
-        <Text style={styles.label}>Confirm Password</Text>
+         <Text style={styles.label}>Confirm Password</Text>
         <TextInput
           secureTextEntry={true} 
 
@@ -216,5 +220,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditProfileView;
+export default PlayerSettings;
 

@@ -32,6 +32,7 @@ import Terrainreservations from "./client/screens/terrainreservations.jsx";
 import Post from "./client/screens/Components/Terraindetails/Post.jsx"
 import OwnerProfile from "./client/screens/Components/Homeowner/OwnerProfile/OwnerProfile.jsx";
 import ResetPassword from "./client/screens/OwnerAuth/ResetPassword.jsx"
+import Settings from './client/screens/Components/PlayerSettings/Settings.jsx'
 const Stack = createNativeStackNavigator();
 
 
@@ -41,9 +42,10 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-    {/*  <Stack.Screen
+      
+     {/* <Stack.Screen
 name="Post"
-component={Post}/>*/}
+component={Post}/> */}
  <Stack.Screen
           name="Landingscreen"
           component={LandingScreen}
@@ -91,7 +93,11 @@ component={OwnerProfile}>
             title: "",
           }}
         ></Stack.Screen>
-
+  <Stack.Screen
+name="Settings"
+component={Settings}>
+  
+</Stack.Screen>
 
         <Stack.Screen
           name="homeowner"

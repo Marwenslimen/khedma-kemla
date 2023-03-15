@@ -38,11 +38,13 @@ const OwnerCreateAccount = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [FirstName, setFirstName] = useState("");
+    const[LastName, setLastName] = useState("");
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [patentImage, setPatentImage] = useState("");
   const [ProfileImage, setProfileImage] = useState("");
-  const [FireId, setFireId] = useState("");
+
   const [show, setShow] = useState(false);
 
   /// Upload an image to Firebase Cloud Storage
@@ -103,14 +105,16 @@ const OwnerCreateAccount = () => {
     let body = {
       Fireid: FireId,
       Email: email,
-      FullName: fullName,
+      FirstName: FirstName,
+      LastName:LastName,
       PhoneNumber: phoneNumber,
       patentImage: patentImage,
-      ProfileImage: ProfileImage,
+      ProfileImage: "https://cdn.vectorstock.com/i/1000x1000/43/94/default-avatar-photo-placeholder-icon-grey-vector-38594394.webp",
     };
     axios
       .post(`${baseUrl}owner/signUpOwner`, body)
-      .then((response) => console.log("account created successfully"))
+      .then((response) =>{  console.log("account created successfully");
+    navigation.navigate('ownerlogin')})
       .catch((err) => console.log(err));
   };
 
@@ -143,13 +147,17 @@ const OwnerCreateAccount = () => {
   };
 
   const Register = () => {
+    if(patentImage){
     createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
         // uploadImage(patentImage,'my-image.jpg')
         axiosPost(res._tokenResponse.localId);
         navigation.navigate("ownerLogin");
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.log(e))
+    }else{
+      alert("Patent Image required ! ")
+    };
   };
 
   return (
@@ -163,10 +171,20 @@ const OwnerCreateAccount = () => {
           </Text>
           <TextInput
             size="sm"
-            placeholder="Full Name"
-            value={fullName}
+            placeholder="First Name"
+            value={FirstName}
             onChangeText={(text) => {
-              setFullName(text);
+              setFirstName(text);
+            }}
+            style={styles.input}
+            placeholderTextColor="lightgrey"
+          />
+            <TextInput
+            size="sm"
+            placeholder="Last Name"
+            value={LastName}
+            onChangeText={(text) => {
+              setLastName(text);
             }}
             style={styles.input}
             placeholderTextColor="lightgrey"

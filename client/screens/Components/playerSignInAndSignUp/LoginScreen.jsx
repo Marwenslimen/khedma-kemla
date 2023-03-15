@@ -24,7 +24,7 @@ const LoginScreen = () => {
       const userInfos = await signInWithEmailAndPassword(auth, email, password);
       const user = userInfos.user;
       alert("Welcome");
-      navigation.navigate("Home");
+      navigation.navigate("Settings");//kenet Home
     } catch (err) {
       console.log(err);
       alert("Invalid E-mail or Password!");
